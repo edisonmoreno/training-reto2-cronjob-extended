@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':model')
+    implementation 'org.springframework:spring-context'
+
+    implementation("com.rabbitmq:amqp-client:5.13.1")
+    implementation('com.google.code.gson:gson:2.8.8')
+    implementation('org.springframework.boot:spring-boot-starter-mail')
+}
+

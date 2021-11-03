@@ -1,0 +1,33 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: "ms-extended"
+  devtools:
+    add-properties: false
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: training@pebih.com
+    password: edison
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+        auth: true
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
+adapter:
+  restconsumer:
+    timeout: 5000
+    url: "https://com-edisonmoreno-ms-queries.herokuapp.com/"
+
