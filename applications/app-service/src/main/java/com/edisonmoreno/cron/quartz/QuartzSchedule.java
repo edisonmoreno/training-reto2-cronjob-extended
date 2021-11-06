@@ -1,6 +1,5 @@
 package com.edisonmoreno.cron.quartz;
 
-import com.edisonmoreno.cron.general.CronJobTaskScheduler;
 import com.edisonmoreno.usecase.cronjob.CronJobUseCase;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -8,20 +7,22 @@ import org.quartz.impl.matchers.KeyMatcher;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Map;
 
 @Component
 public final class QuartzSchedule {
-    private static Logger logger = LoggerFactory.getLogger(CronJobTaskScheduler.class);
-    public Scheduler scheduler;
-    @Autowired
-    private CronJobUseCase cronJobUseCase;
+    private static Logger logger = LoggerFactory.getLogger(QuartzSchedule.class);
+    private Scheduler scheduler;
+    private final CronJobUseCase cronJobUseCase;
 
-    public QuartzSchedule() {
+    public QuartzSchedule(CronJobUseCase cronJobUseCase) {
+        this.cronJobUseCase = cronJobUseCase;
         SchedulerFactory scheduleFact = new StdSchedulerFactory();
         try {
             scheduler = scheduleFact.getScheduler();
@@ -55,7 +56,7 @@ public final class QuartzSchedule {
             trigger.setDescription(name);
 
             // Listener
-            JobListener jobListener = new QuartzListener();
+            JobListener jobListener = new QuartzListener(cronJobUseCase);
             Matcher<JobKey> matcher = KeyMatcher.keyEquals(jobDetail.getKey());
 
             scheduler.getListenerManager().addJobListener(jobListener, matcher);

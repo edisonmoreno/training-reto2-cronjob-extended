@@ -1,7 +1,8 @@
 package com.edisonmoreno.cron.quartz;
 
-import com.edisonmoreno.infra.email.EmailService;
+import com.edisonmoreno.infra.email.EmailServiceImpl;
 import com.edisonmoreno.model.EmailBody;
+import com.edisonmoreno.usecase.cronjob.CronJobUseCase;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -13,6 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class QuartzListener implements JobListener {
     private static final Logger logger = LoggerFactory.getLogger(QuartzListener.class);
+    private final CronJobUseCase cronJobUseCase;
+
+    public QuartzListener(CronJobUseCase cronJobUseCase) {
+        logger.info("QuartzListener()");
+        this.cronJobUseCase = cronJobUseCase;
+    }
 
     @Override
     public String getName() {
@@ -34,32 +41,23 @@ public class QuartzListener implements JobListener {
         logger.info("QuartzListener.jobWasExecuted()");
 
         updateExecution(context.getJobDetail().getKey().getName(), context.getJobDetail().getJobDataMap());
+
         sendEmail(context.getJobDetail().getJobDataMap().get("email").toString());
     }
 
-    private void sendEmail(String Email) {
-        assert Email != null;
-//        EmailService emailService = new EmailService();
-//        EmailBody emailBody = EmailBody.builder()
-//                .subject("PRUEBA")
-//                .content("JOB")
-//                .email(Email)
-//                .build();
-//        emailService.sendEmail(emailBody);
+    private void sendEmail(String email) {
+        EmailServiceImpl emailServiceImpl = new EmailServiceImpl();
+        EmailBody emailBody = EmailBody.builder()
+                .subject("Ejecución de job")
+                .content("Se ha ejecutado el job programado")
+                .email(email)
+                .build();
+        emailServiceImpl.sendEmail(emailBody);
     }
 
     public void updateExecution(String cronJobId, JobDataMap data) {
-
-//        executionUseCase.getExecutionInformation(data.get("url").toString())
-//                .map(executionDTO -> executionDTO.toBuilder()
-//                        .type("ms-commands.cronjob.execution")
-//                        .cronJobId(cronJobId)
-//                        .state("SUCCESS")
-//                        .duration("20")
-//                        .build())
-//                .flatMap(cronJobUseCase::sendData)
-//                .subscribe();
-
+        cronJobUseCase.getHostInformation(cronJobId, data.get("url").toString())
+                .subscribe();
     }
 
 }

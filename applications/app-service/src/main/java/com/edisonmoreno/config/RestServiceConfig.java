@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,18 +21,33 @@ import static io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Configuration
-public class RestConsumerConfig {
+public class RestServiceConfig {
 
-    @Value("${adapter.restconsumer.url}")
-    private String url;
-    @Value("${adapter.restconsumer.timeout}")
+    @Value("${adapter.rest-consumer.timeout}")
     private int timeout;
+    @Value("${adapter.rest-consumer.ms-queries}")
+    private String urlQueries;
+    @Value("${adapter.rest-consumer.ms-commands}")
+    private String urlCommands;
 
-    @Bean
-    public WebClient getWebClient() {
+    @Bean("webClientQueries")
+    public WebClient getWebClientQueries() {
         return WebClient.builder()
-                .baseUrl(url)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+                .baseUrl(urlQueries)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .clientConnector(getClientHttpConnector())
+                .build();
+    }
+
+    @Bean("webClientCommands")
+    public WebClient getWebClientCommands() {
+        return WebClient.builder()
+                .baseUrl(urlCommands)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.AUTHORIZATION)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .clientConnector(getClientHttpConnector())
                 .build();
     }

@@ -27,7 +27,8 @@ spring:
         timeout: 5000
         writetimeout: 5000
 adapter:
-  restconsumer:
+  rest-consumer:
     timeout: 5000
-    url: "https://com-edisonmoreno-ms-queries.herokuapp.com/"
+    ms-queries: "https://com-edisonmoreno-ms-queries.herokuapp.com/"
+    ms-commands: "https://com-edisonmoreno-ms-commands.herokuapp.com/"
 

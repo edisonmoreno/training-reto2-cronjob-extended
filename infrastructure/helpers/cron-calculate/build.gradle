@@ -1,9 +1,10 @@
 dependencies {
     implementation project(':model')
-    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-context:5.3.12'
 
     implementation("com.rabbitmq:amqp-client:5.13.1")
-    implementation('com.google.code.gson:gson:2.8.8')
-    implementation('org.springframework.boot:spring-boot-starter-mail')
+    implementation('com.google.code.gson:gson:2.8.9')
+    implementation('org.springframework.boot:spring-boot-starter-mail:2.5.5')
+    implementation 'com.sendgrid:sendgrid-java:4.7.6'
 }
 

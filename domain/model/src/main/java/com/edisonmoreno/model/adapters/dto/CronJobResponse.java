@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CronJobResponse {
+public class CronJobResponse implements Serializable {
     private String id;
     private String name;
     private String url;
