@@ -27,8 +27,10 @@ public class CronJobTaskInitialize implements Runnable {
         logger.info("initialize schedule...");
         quartzSchedule.init();
         if (repeatCount > 3) {
-            logger.info("exceeded the number of repetitions...");
+            logger.info("ends the application with the number of repetitions limit ... ");
+            System.exit(0);
             //Todo: Cambiar por parametro de finalización de ejecución, o número de repeticiones
+
             return;
         }
         logger.info("Update list cron job...#{}", repeatCount);
