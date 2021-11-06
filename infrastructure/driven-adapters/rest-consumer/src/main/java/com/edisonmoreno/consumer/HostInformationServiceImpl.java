@@ -20,7 +20,7 @@ public class HostInformationServiceImpl implements HostInformationService {
     public Mono<CronExecutionDTO> call(String host) {
         this.webClient = WebClient.create(host);
         webClient = WebClient.builder()
-                .baseUrl("http://www.google.com")
+                .baseUrl(host)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.AUTHORIZATION)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
