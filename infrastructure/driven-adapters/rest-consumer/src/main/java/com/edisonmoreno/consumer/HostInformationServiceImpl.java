@@ -34,7 +34,7 @@ public class HostInformationServiceImpl implements HostInformationService {
                         .duration(tuple.getT1().toString())
                         .date(Instant.now().toString())
                         .httpCode(tuple.getT2().getStatusCode().toString())
-                        .state(tuple.getT2().getStatusCode().isError() ? "FAILED" : "SUCCESS")
+                        .state(tuple.getT2().getStatusCode().is2xxSuccessful() ? "SUCCESS" : "FAILED")
                         .build())
                 .doOnError(System.out::println);
     }
